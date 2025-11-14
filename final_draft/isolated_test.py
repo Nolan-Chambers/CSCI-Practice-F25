@@ -1,6 +1,7 @@
 """An isolated test of the hangman game logic using hardcoded variables."""
 
 import random
+import time
 
 def sort_lists() -> dict:
     """Mimics sorting of data from files, but hardcoded b/c there is no file"""
@@ -22,25 +23,46 @@ def random_lvl_choice() -> str:
     choice = random(options)
     return choice
 
+# Or:
+def select_level() -> str:
+    """Prompts the user to select their desired difficulty level
+
+    Args:
+        None
+
+    Returns:
+        str: The chosen difficulty
+    """
+    print("[bold]Difficulty Options:[/bold]" + '\n')
+    time.sleep(.5)
+    print("[green]Easy[/green]" + " |  " + "[yellow]Medium[/yellow]" + "  | " + "[red]Hard[/red]")
+    time.sleep(.5)
+    for i in range(3):
+        print('.', end='')
+        time.sleep(.8)
+    print("    [dark_red]Challenge[/dark_red]")
+    while True:
+        difficulty = input('Enter your desired difficulty level: ').strip().lower()
+        if difficulty == 'easy':
+            return 'easy'
+        elif difficulty == 'medium':
+            return 'medium'
+        elif difficulty == 'hard':
+            return 'hard'
+        elif difficulty == 'challenge':
+            return 'challenge'
+        else:
+            print("Please enter a valid difficulty level.")
+            time.sleep(0.5)
+            continue
+
+
 
 def select_word(game_words: dict, choice) -> str:
     """Chooses a random word from the dictionary of lists of words"""
     for words in game_words[f'{choice}']:
         game_word = random(choice)
     return game_word
-
-
-word = 'apple'
-
-def word_blank_setup(word: str) -> None:
-    """Creates the blanks corresponding to the letters in the game word and displays them"""
-    blanks = ' _ ' * len(word)
-    print(blanks)
-
-# word_blank_setup(word)  # Works!#
-
-
-
 
 
 def take_guess(word: str) -> tuple[bool, list]:
@@ -54,9 +76,6 @@ def take_guess(word: str) -> tuple[bool, list]:
     else:
         return False, incorrect_letters.append(letter)
 
-num_guesses = 2  # Will be set in game loop. Defined like in settings of Lab final
-guess = (True, ['a', 'p'])
-word = 'apple'
 
 def chars_guessed(num_guesses: int, word: str, guess: tuple) -> None:
     """Sets up blanks corresponding to the letters in the game word and displays them. Additionally
@@ -82,6 +101,3 @@ def chars_guessed(num_guesses: int, word: str, guess: tuple) -> None:
             else:
                 print('_', end=' ')
     print('\n')
-
-
-chars_guessed(num_guesses, word, guess)
