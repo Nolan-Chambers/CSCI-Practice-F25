@@ -3,6 +3,27 @@
 import random
 import time
 
+
+def assign_guess_allowance(difficulty: str) -> int:
+    """Determines the number of guesses the user gets depending on their selected difficulty
+
+    Args:
+        difficulty (str): the selected difficulty
+
+    Returns:
+        int: the number of allotted guesses the user is allowed
+    """
+    if difficulty == 'easy':
+        guesses_allowed = 5
+    elif difficulty == 'medium':
+        guesses_allowed = 8
+    elif difficulty == 'hard':
+        guesses_allowed = 10
+    else:
+        guesses_allowed = 12
+    return guesses_allowed
+
+
 def sort_lists() -> dict:
     """Mimics sorting of data from files, but hardcoded b/c there is no file"""
     easy = ['app', 'bow', 'cow']
@@ -65,9 +86,23 @@ def select_word(game_words: dict, choice) -> str:
     return game_word
 
 
-def take_guess(word: str) -> tuple[bool, list]:
-    """Takes user input for a letter guess"""
-    letter = str(input().strip().lower())
+def guess_and_check(word: str) -> tuple[bool, list]:
+    """Checks user input of an individual letter guess
+
+    Args:
+        word (str): the word the user is attempting to guess
+
+    Returns:
+        tuple[bool, list]: True and a list of the correct letter guesses if correct,
+        False and a list of incorrect letters guessed otherwise
+    """
+    while True:
+        letter = str(input().strip().lower())
+        if letter.ord() >= 97 and letter.ord() <=122:
+            break
+        else:
+            print("Please enter a valid character.")
+            continue
 
     correct_letters = []  # Will probably be defined in game loop
     incorrect_letters = []  # Ditto

@@ -4,6 +4,7 @@ import isolated_test as i_t
 import player_file as p_f
 from rich import print
 import time
+import os
 
 
 def clr_scrn() -> None:
@@ -41,7 +42,6 @@ def game_options() -> int:
             continue
 
 
-
 def hangman_loop(user: str, guesses: int) -> bool:
     """The main game loop
 
@@ -56,12 +56,23 @@ def hangman_loop(user: str, guesses: int) -> bool:
     print("[green italic]Beginning game...[/green italic]")
     time.sleep(0.5)
     print("[Bold]Ready?[/Bold]")
-    print('[italic[Press ENTER to continue][/italic]')
+    print('[italic]Press ENTER to continue[/italic]')
     input()
     clr_scrn()
 
+    game_words_dict = i_t.sort_lists()
     difficulty = i_t.select_level()
-    
+    chosen_word = i_t.select_word(game_words_dict, difficulty)
+    guesses_allowed = i_t.assign_guess_allowance(difficulty)
+    tot_guesses = 0
+
+    # print hangman initial display
+    # maybe make this a function inside of a class?
+    print("[italic]Enter a letter:[/italic]")
+    while tot_guesses <= guesses_allowed:
+        status = i_t.guess_and_check(chosen_word)
+        tot_guesses += 1
+
 
 
 def start_scrn() -> None:
@@ -72,7 +83,7 @@ def start_scrn() -> None:
         time.sleep(0.5)
         print("\n")
     print("[bold]Welcome to Hangman![bold]\n")
-    print('[italic[Press ENTER to continue][/italic]')
+    print('[italic]Press ENTER to continue[/italic]')
     input()
     
 
@@ -98,7 +109,7 @@ def main() -> None:
             # game
         elif selection == 2:
             # view leaderboard
-        elif selection == 3:
+        else:
             print("[green italic]Saving data...[/green italic]")
             p_f.save_data(file_name="playerData.yaml", player_data=player_data)
             time.sleep(0.5)
